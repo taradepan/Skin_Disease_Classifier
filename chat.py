@@ -4,7 +4,6 @@ import dotenv
 dotenv.load_dotenv()
 import PIL.Image
 
-img = PIL.Image.open('image.jpg')
 
 google_api_key = os.getenv('GOOGLE_API_KEY')
 
@@ -37,6 +36,7 @@ def generate_response(prompt):
 
 def process_img():
     try:
+        img = PIL.Image.open('image.jpg')
         model = genai.GenerativeModel('gemini-pro-vision')
         response = model.generate_content(["""your job is to analyze the given image and say if you suspect any skin deseases or not. If the given image is not a skin, say "not a skin". If you think it's a healthy skin, say "healthy skin". If NOT then provide the name of desease you think it is. don't give any other information.  Response:  """, img], stream=True)
         response.resolve()
