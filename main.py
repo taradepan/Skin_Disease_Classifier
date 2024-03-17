@@ -5,7 +5,7 @@ import dotenv
 from chat import process_img, generate_response, init_prompt
 dotenv.load_dotenv()
 
-st.title("Chat with Gemini")
+st.title("Skin Desease AI")
 
 picture = st.camera_input("Take a picture")
 
