@@ -1,27 +1,38 @@
 import streamlit as st
-import google.generativeai as genai
+from PIL import Image
+import io
 import os
-import dotenv
 from chat import process_img, generate_response, init_prompt
-dotenv.load_dotenv()
 
-st.title("Skin Desease AI")
+st.title("Skin Disease AI")
 
-picture = st.camera_input("Take a picture")
+if "uploaded_image" not in st.session_state:
+    st.session_state.uploaded_image = None
 
-if picture:
-    with open('image.jpg', 'wb') as f:
-        f.write(picture.read())
-        f.flush()
-        os.fsync(f.fileno())
-    picture.seek(0)
+file_uploader_placeholder = st.empty()
+camera_input_placeholder = st.empty()
 
-    desease = process_img()
+if st.session_state.uploaded_image is None:
+    uploaded_file = file_uploader_placeholder.file_uploader("Upload an image", type=["jpg", "png"])
+    picture = camera_input_placeholder.camera_input("Or take a picture")
+
+    if uploaded_file is not None:
+        picture = uploaded_file
+
+    if picture:
+        image = Image.open(picture)
+        st.session_state.uploaded_image = image
+
+        file_uploader_placeholder.empty()
+        camera_input_placeholder.empty()
+
+if st.session_state.uploaded_image is not None:
+    st.image(st.session_state.uploaded_image, caption='Uploaded Image', use_column_width=True)
+    disease = process_img()
 
     if "messages" not in st.session_state.keys():
-        st.session_state.messages = [{"role": "assistant", "content": init_prompt(desease)}]
+        st.session_state.messages = [{"role": "assistant", "content": init_prompt(disease)}]
 
-    
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -33,7 +44,6 @@ if picture:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
 
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):

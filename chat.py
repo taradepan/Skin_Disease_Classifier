@@ -6,9 +6,9 @@ import PIL.Image
 import os
 
 
-google_api_key = os.getenv('GOOGLE_API_KEY')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-genai.configure(api_key=google_api_key)
+genai.configure(api_key=GEMINI_API_KEY)
 
 messages = []
 def init_prompt(desease):
@@ -41,10 +41,8 @@ def process_img():
         model = genai.GenerativeModel('gemini-pro-vision')
         response = model.generate_content(["""your job is to analyze the given image and say if you suspect any skin deseases or not. If the given image is not a skin, say "not a skin". If you think it's a healthy skin, say "healthy skin". If NOT then provide the name of desease you think it is. don't give any other information.  Response:  """, img], stream=True)
         response.resolve()
-        os.remove('image.jpg')
         print(response.text)
         return response.text
     except Exception as e:
         print(e)
-        os.remove('image.jpg')
-        return "healthy skin"
+        return e
