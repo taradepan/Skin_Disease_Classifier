@@ -18,10 +18,12 @@ if st.session_state.uploaded_image is None:
 
     if uploaded_file is not None:
         picture = uploaded_file
+        
 
     if picture:
         image = Image.open(picture)
         st.session_state.uploaded_image = image
+        image.save('image.jpg')
 
         file_uploader_placeholder.empty()
         camera_input_placeholder.empty()
