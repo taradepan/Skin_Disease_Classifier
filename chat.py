@@ -17,6 +17,7 @@ def init_prompt(desease):
                     In case it's an healthy skin, say the skin looks healthy.
                     If it's a skin desease, ask for any symptoms ask atleast 2-3 questions to confirm the desease.
                     Remember the given desease is provided by analyzing a image, your job is to confirm if the user really has the desease or not.
+                    If the symptoms doesn't match the desease, ask the user to consult a doctor.
                     ASK ONE QUESTION AT A TIME.
                     Desease: {desease}
                     Question:
